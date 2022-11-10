@@ -3,65 +3,45 @@
     {
       "img": "img/tabs/1.png",
       "altimg": "usual",
-      "title": "Plan 'Usual'",
+      "title": "Plan Usual",
       "descr": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditatebeatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.",
       "price": 10
     },
     {
       "img": "img/tabs/2.jpg",
-      "altimg": "usual",
-      "title": "Plan 'Premium'",
+      "altimg": "plan",
+      "title": "Plan “Premium”",
       "descr": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditatebeatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.",
       "price": 20
     },
     {
       "img": "img/tabs/3.jpg",
-      "altimg": "usual",
-      "title": "Plan 'VIP'",
+      "altimg": "vip",
+      "title": "Plan “Vip”",
       "descr": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditatebeatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.",
       "price": 30
     }
   ],
   "request": [
     {
-      "name": "name",
-      "phone": "+12123123123",
+      "name": "Samar Kamal",
+      "phone": "+2001553789392",
+      "id": 1
+    },
+    {
+      "name": "Samar Kamal",
+      "phone": "+1 (321) 321-3213",
       "id": 2
     },
     {
-      "name": "bobur",
-      "phone": "1823123",
+      "name": "Samar Kamal",
+      "phone": "+1 (321) 321-3213",
       "id": 3
     },
     {
-      "name": "zero",
-      "phone": "0200",
-      "id": 5
-    },
-    {
-      "name": "zero",
-      "phone": "0000",
-      "id": 6
-    },
-    {
-      "name": "name",
-      "phone": "12312313",
-      "id": 7
-    },
-    {
-      "name": "name",
-      "phone": "123123",
-      "id": 8
-    },
-    {
-      "name": "das",
-      "phone": "123123",
-      "id": 9
-    },
-    {
-      "name": "name",
-      "phone": "647646",
-      "id": 10
+      "name": "Samar Kamal",
+      "phone": "+2001553789392",
+      "id": 4
     }
   ]
 }

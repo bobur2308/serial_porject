@@ -1,14 +1,21 @@
 {
-  "name": "serial_pro",
+  "name": "serial",
   "version": "1.0.0",
-  "description": "",
-  "main": "script.js",
+  "description": "JavaScript from 0 to hero",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Bobur Niyozov",
+  "keywords": [
+    "js",
+    "html",
+    "serial",
+    "serialize",
+    "serialize-html"
+  ],
+  "author": "Samar Badriddinov",
   "license": "ISC",
-  "dependencies": {
-    "json-server": "^0.17.1"
+  "devDependencies": {
+    "json-server": "^0.17.0"
   }
 }

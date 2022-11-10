@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Timer
 
-  const deadline = '2022-12-31'
+  const deadline = '2022-08-11'
 
   function getTimeRemaining(endtime) {
     let days, hours, minutes, seconds
@@ -192,14 +192,18 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  axios.get('http://localhost:3000/menu').then(data=>{
-    data.data.forEach(({img,altimg,title,descr,price})=>{
-      new MenuCard(img,altimg,title,descr,price,'.menu .container').render()
+  axios.get('http://localhost:3000/menu').then((data) => {
+    data.data.forEach(({ img, altimg, title, descr, price }) => {
+      new MenuCard(
+        img,
+        altimg,
+        title,
+        descr,
+        price,
+        '.menu .container'
+      ).render()
     })
   })
-
-  
-  
 
   // Form
   const forms = document.querySelectorAll('form')
@@ -213,15 +217,21 @@ window.addEventListener('DOMContentLoaded', () => {
     success: "Thank's for submitting our form",
     failure: 'Something went wrong',
   }
-  async function postData(url,data){
-    const res = await fetch(url,{
-        method:"POST",
-        headers:{
-          'Content-Type':'application/json'
-        },
-        body:data
-      })
-    return await res.json() 
+
+  async function postData(url, data) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: data,
+    })
+
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${res.status}`)
+    }
+
+    return await res.json()
   }
 
   function bindPostData(form) {
@@ -236,20 +246,22 @@ window.addEventListener('DOMContentLoaded', () => {
       `
       form.insertAdjacentElement('afterend', statusMessage)
 
-
       const formData = new FormData(form)
+
       const json = JSON.stringify(Object.fromEntries(formData.entries()))
 
-      
-      postData('http://localhost:3000/request',json).then(data=>{
-        console.log(data);
-        showThanksModal(msg.success)
-        statusMessage.remove()
-      }).catch(()=>{
-        showThanksModal(msg.failure)
-      }).finally(()=>{
-        form.reset()
-      })
+      postData('http://localhost:3000/request', json)
+        .then((data) => {
+          console.log(data)
+          showThanksModal(msg.success)
+          statusMessage.remove()
+        })
+        .catch(() => {
+          showThanksModal(msg.failure)
+        })
+        .finally(() => {
+          form.reset()
+        })
     })
   }
 
@@ -275,121 +287,130 @@ window.addEventListener('DOMContentLoaded', () => {
       prevModalDialog.classList.remove('hide')
       closeModal()
     }, 4000)
-  };
+  }
 
-  
+  // Slider
+
   const slides = document.querySelectorAll('.offer__slide'),
-    next = document.querySelector(".offer__slider-next"),
+    next = document.querySelector('.offer__slider-next'),
     prev = document.querySelector('.offer__slider-prev'),
-    total = document.querySelector("#total"),
+    total = document.querySelector('#total'),
     current = document.querySelector('#current'),
-    slidesWrapper = document.querySelector(".offer__slider-wrapper"),
-    slidesField = document.querySelector(".offer__slider-inner"),
-    width = window.getComputedStyle(slidesWrapper).width
+    slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+    slidesField = document.querySelector('.offer__slider-inner'),
+    width = window.getComputedStyle(slidesWrapper).width,
+    sldier = document.querySelector('.offer__slider')
 
   let slideIndex = 1
   let offset = 0
-  //***********************************Hard Slider  **********************/
-  if(slides.length<10){
+
+  // ------*************************************************---------------------
+  //                CAROUSEL SLIDER
+  // ------*************************************************---------------------
+
+  if (slides.length < 10) {
     total.textContent = `0${slides.length}`
     current.textContent = `0${slideIndex}`
-  }else{
+  } else {
     total.textContent = slides.length
     current.textContent = slideIndex
   }
-  slidesField.style.width = 100*slides.length+"%"
+
+  slidesField.style.width = 100 * slides.length + '%'
   slidesField.style.display = 'flex'
   slidesField.style.transition = '.5s ease all'
   slidesWrapper.style.overflow = 'hidden'
 
-  slides.forEach(slide=>{
+  slides.forEach((slide) => {
     slide.style.width = width
   })
 
-  next.addEventListener('click',()=>{
-    if(offset == +width.slice(0,width.length-2) * (slides.length-1)){
+  const indicators = document.createElement('ol')
+  const dots = []
+  indicators.classList.add('carousel-indicators')
+  sldier.append(indicators)
+
+  for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement('li')
+    dot.setAttribute('data-slide-to', i + 1)
+    dot.classList.add('carousel-dot')
+    if (i == 0) {
+      dot.style.opacity = 1
+    }
+    indicators.append(dot)
+    dots.push(dot)
+  }
+
+  function deleteNotDigits(str) {
+    return parseInt(str.replace(/\D/g, ''))
+  }
+
+  next.addEventListener('click', () => {
+    if (offset == deleteNotDigits(width) * (slides.length - 1)) {
       offset = 0
-    }else{
-      offset+=+width.slice(0,width.length-2)
+    } else {
+      offset += deleteNotDigits(width)
     }
     slidesField.style.transform = `translateX(-${offset}px)`
 
-    if(slideIndex==slides.length){
-      slideIndex=1
-    }else{
+    if (slideIndex == slides.length) {
+      slideIndex = 1
+    } else {
       slideIndex++
     }
 
-    if(slides.length<10){
+    if (slides.length < 10) {
       current.textContent = `0${slideIndex}`
-    }else{
+    } else {
       current.textContent = slideIndex
     }
 
+    dots.forEach((dot) => (dot.style.opacity = '.5'))
+    dots[slideIndex - 1].style.opacity = 1
   })
-   
-  prev.addEventListener('click',()=>{
-    if(offset == +width.slice(0,width.length-2) * (slides.length-1)){
-      offset = 0
-    }else{
-      offset-=+width.slice(0,width.length-2)
+
+  prev.addEventListener('click', () => {
+    if (offset == 0) {
+      offset = deleteNotDigits(width) * (slides.length - 1)
+    } else {
+      offset -= deleteNotDigits(width)
     }
     slidesField.style.transform = `translateX(-${offset}px)`
 
-    if(slideIndex==1){
-      slideIndex=slides.length
-    }else{
+    if (slideIndex == 1) {
+      slideIndex = slides.length
+    } else {
       slideIndex--
     }
 
-    if(slides.length<10){
+    if (slides.length < 10) {
       current.textContent = `0${slideIndex}`
-    }else{
+    } else {
       current.textContent = slideIndex
     }
 
+    dots.forEach((dot) => (dot.style.opacity = '.5'))
+    dots[slideIndex - 1].style.opacity = 1
   })
 
+  dots.forEach((dot) => {
+    dot.addEventListener('click', (e) => {
+      const slideTo = e.target.getAttribute('data-slide-to')
 
+      slideIndex = slideTo
+      offset = deleteNotDigits(width) * (slideTo - 1)
+      slidesField.style.transform = `translateX(-${offset}px)`
 
+      if (slides.length < 10) {
+        current.textContent = `0${slideIndex}`
+      } else {
+        current.textContent = slideIndex
+      }
 
+      dots.forEach((dot) => (dot.style.opacity = '.5'))
+      dots[slideIndex - 1].style.opacity = 1
+    })
+  })
 
-
-
-
-
-  //******************************EASYslider********************************
-  // slides.forEach(item=>item.style.display = 'none')
-  // slides[slideIndex-1].style.display = 'block'
-  // if(slides.length<10){
-  //   total.textContent = `0${slides.length}`
-  // }else{
-  //   total.textContent = slides.length
-  // }
-
-  // function showSlide(indx){
-  //   if(indx>slides.length){slideIndex=1}
-  //   if(indx<1){slideIndex=slides.length}
-  //   slides.forEach(item=>item.style.display = 'none')
-  //   slides[slideIndex-1].style.display = 'block'
-
-  //   if(slides.length<10){
-  //     current.textContent = `0${slideIndex}`
-  //   }else{
-  //     current.textContent = slideIndex
-  //   }
-  // }
-  // function changeSlide(indx){
-  //   showSlide(slideIndex+=indx)
-  // }
-  // next.addEventListener('click',()=>{
-  //   changeSlide(1)
-  // })
-  // prev.addEventListener('click',()=>{
-  //   changeSlide(-1)
-  // })
-
-
-
-
+  
 })
